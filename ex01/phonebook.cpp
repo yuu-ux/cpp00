@@ -10,12 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <iterator>
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <cstdlib>
 #include "phonebook.h"
 #include "contact.h"
-
 
 PhoneBook::PhoneBook() : size_(0) {}
 
@@ -88,24 +89,59 @@ std::string FormatChar(std::string str) {
 	return new_str;
 }
 
+void PrintHeadFourColumn() {
+	std::cout << std::setw(10) << "index" << "|";
+	std::cout << std::setw(10) << "first_name" << "|";
+	std::cout << std::setw(10) << "last_name" << "|";
+	std::cout << std::setw(10) << "nick_name" << "|";
+	std::cout << std::endl;
+}
+
 void PrintHead() {
 	std::cout << std::setw(10) << "index" << "|";
 	std::cout << std::setw(10) << "first_name" << "|";
 	std::cout << std::setw(10) << "last_name" << "|";
 	std::cout << std::setw(10) << "nick_name" << "|";
-	std::cout << std::setw(10) << std::endl;
+	std::cout << std::setw(15) << "phone_number" << "|";
+	std::cout << std::setw(15) << "darkest_secret" << "|";
+	std::cout << std::endl;
 }
+
+bool PhoneBook::is_validate(std::string index) {
+	if (index.empty()) {
+		return false;
+	}
+	int _index = std::atoi(index.c_str());
+	if (0 > _index || (size_ - 1) < _index) {
+		return false;
+	}
+	return true;
+}
+
 void PhoneBook::Search() {
-	PrintHead();
+	if (size_ == 0) {
+		std::cout << "登録されている連絡先がありません" << std::endl;
+		return ;
+	}
+	PrintHeadFourColumn();
 	for (int i = 0; i < size_; i++) {
 		std::cout << std::setw(10) << i << "|";
 		std::cout << std::setw(10) << FormatChar(get_contact(i).get_first_name()) << "|";
 		std::cout << std::setw(10) << FormatChar(get_contact(i).get_last_name()) << "|";
 		std::cout << std::setw(10) << FormatChar(get_contact(i).get_nick_name()) << "|";
-		std::cout << std::setw(10) << std::endl;
+		std::cout << std::endl;
 	}
 	std::cout << "詳細を確認したいインデックスを選択してください" << std::endl;
 	std::string index;
 	std::getline(std::cin, index);
+	if (is_validate(index)) {
+		PrintHead();
+		std::cout << std::setw(10) << index << "|";
+		std::cout << std::setw(10) << get_contact(std::atoi(index.c_str())).get_first_name() << "|";
+		std::cout << std::setw(10) << get_contact(std::atoi(index.c_str())).get_last_name() << "|";
+		std::cout << std::setw(10) << get_contact(std::atoi(index.c_str())).get_nick_name() << "|";
+		std::cout << std::setw(15) << get_contact(std::atoi(index.c_str())).get_phone_number() << "|";
+		std::cout << std::setw(15) << get_contact(std::atoi(index.c_str())).get_darkest_secret() << "|";
+		std::cout << std::endl;
+	}
 }
-

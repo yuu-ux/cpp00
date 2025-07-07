@@ -24,6 +24,7 @@ class PhoneBook {
 		int get_size() const;
 		std::string InputInfo(std::string);
 		std::string InputPhoneNumber();
+		bool is_validate(std::string index);
 	private:
 		Contact		contacts_[8];
 		int	size_;
