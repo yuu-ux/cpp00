@@ -74,7 +74,7 @@ void PhoneBook::Add() {
 	// 電話番号は追加のバリデーションがあるため、別関数に切り出し
 	std::string phone_number = InputPhoneNumber();
 	std::string darkest_secret = InputInfo("darkest_secret: ");
-	contacts_[size_] = Contact(first_name, last_name, nick_name, phone_number, darkest_secret);
+	contacts_[size_ % 8] = Contact(first_name, last_name, nick_name, phone_number, darkest_secret);
 	size_++;
 }
 
@@ -116,7 +116,7 @@ void PhoneBook::Search() {
 		return ;
 	}
 	PrintHead();
-	for (int i = 0; i < size_; i++) {
+	for (int i = 0; i < 8; i++) {
 		std::cout << std::setw(10) << i << "|";
 		std::cout << std::setw(10) << FormatChar(get_contact(i).get_first_name()) << "|";
 		std::cout << std::setw(10) << FormatChar(get_contact(i).get_last_name()) << "|";
