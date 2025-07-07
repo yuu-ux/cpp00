@@ -21,6 +21,10 @@ int main(void)
 	std::cout << "Input ADD or SEARCH or EXIT" << std::endl;
 	while (true) {
 		getline(std::cin, line);
+		if (std::cin.eof()) {
+			std::cout << "EOF" << std::endl;
+			break ;
+		}
 		if (line == "ADD")
 			phone_book.Add();
 		else if (line == "SEARCH")
