@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iterator>
 #include <string>
 #include <iostream>
 #include <iomanip>
@@ -89,26 +88,19 @@ std::string FormatChar(std::string str) {
 	return new_str;
 }
 
-void PrintHeadFourColumn() {
-	std::cout << std::setw(10) << "index" << "|";
-	std::cout << std::setw(10) << "first_name" << "|";
-	std::cout << std::setw(10) << "last_name" << "|";
-	std::cout << std::setw(10) << "nick_name" << "|";
-	std::cout << std::endl;
-}
-
 void PrintHead() {
 	std::cout << std::setw(10) << "index" << "|";
 	std::cout << std::setw(10) << "first_name" << "|";
 	std::cout << std::setw(10) << "last_name" << "|";
 	std::cout << std::setw(10) << "nick_name" << "|";
-	std::cout << std::setw(15) << "phone_number" << "|";
-	std::cout << std::setw(15) << "darkest_secret" << "|";
 	std::cout << std::endl;
 }
 
 bool PhoneBook::is_validate(std::string index) {
 	if (index.empty()) {
+		return false;
+	}
+	if (!is_numeric(index)) {
 		return false;
 	}
 	int _index = std::atoi(index.c_str());
@@ -123,7 +115,7 @@ void PhoneBook::Search() {
 		std::cout << "登録されている連絡先がありません" << std::endl;
 		return ;
 	}
-	PrintHeadFourColumn();
+	PrintHead();
 	for (int i = 0; i < size_; i++) {
 		std::cout << std::setw(10) << i << "|";
 		std::cout << std::setw(10) << FormatChar(get_contact(i).get_first_name()) << "|";
@@ -135,13 +127,13 @@ void PhoneBook::Search() {
 	std::string index;
 	std::getline(std::cin, index);
 	if (is_validate(index)) {
-		PrintHead();
-		std::cout << std::setw(10) << index << "|";
-		std::cout << std::setw(10) << get_contact(std::atoi(index.c_str())).get_first_name() << "|";
-		std::cout << std::setw(10) << get_contact(std::atoi(index.c_str())).get_last_name() << "|";
-		std::cout << std::setw(10) << get_contact(std::atoi(index.c_str())).get_nick_name() << "|";
-		std::cout << std::setw(15) << get_contact(std::atoi(index.c_str())).get_phone_number() << "|";
-		std::cout << std::setw(15) << get_contact(std::atoi(index.c_str())).get_darkest_secret() << "|";
-		std::cout << std::endl;
+		int _index = std::atoi(index.c_str());
+		std::cout << "first_name: " << get_contact(_index).get_first_name() << std::endl;
+		std::cout << "last_name: " << get_contact(_index).get_last_name() << std::endl;
+		std::cout << "nick_name: " << get_contact(_index).get_nick_name() << std::endl;
+		std::cout << "phone_number: " << get_contact(_index).get_phone_number() << std::endl;
+		std::cout << "darkest_secret: " << get_contact(_index).get_darkest_secret() << std::endl;
+	} else {
+		std::cerr << "不正な入力です" << std::endl;
 	}
 }
