@@ -14,19 +14,17 @@
 # define CONTACT_H
 
 #include <string>
+#include <iostream>
 
 class Contact {
 	public:
+		Contact();
+		Contact(std::string first_name, std::string last_name, std::string nick_name, std::string phone_number, std::string darkest_secret);
 		std::string get_first_name() const;
 		std::string get_last_name() const;
 		std::string get_nick_name() const;
 		std::string get_phone_number() const;
 		std::string get_darkest_secret() const;
-		void set_first_name(std::string);
-		void set_last_name(std::string);
-		void set_nick_name(std::string);
-		void set_phone_number(std::string);
-		void set_darkest_secret(std::string);
 
 	private:
 		std::string	first_name_;

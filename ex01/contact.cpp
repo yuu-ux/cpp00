@@ -12,6 +12,22 @@
 
 #include "contact.h"
 
+Contact::Contact() {
+	first_name_ = "";
+	last_name_ = "";
+	nick_name_ = "";
+	phone_number_ = "";
+	darkest_secret_ = "";
+}
+
+Contact::Contact(std::string first_name, std::string last_name, std::string nick_name, std::string phone_number, std::string darkest_secret) {
+	first_name_ = first_name;
+	last_name_ = last_name;
+	nick_name_ = nick_name;
+	phone_number_ = phone_number;
+	darkest_secret_ = darkest_secret;
+}
+
 std::string Contact::get_first_name() const {
 	return (first_name_);
 }
@@ -32,22 +48,3 @@ std::string Contact::get_darkest_secret() const {
 	return (darkest_secret_);
 }
 
-void Contact::set_first_name(std::string first_name) {
-	first_name_ = first_name;
-}
-
-void Contact::set_last_name(std::string last_name) {
-	last_name_ = last_name;
-}
-
-void Contact::set_nick_name(std::string nick_name) {
-	nick_name_ = nick_name;
-}
-
-void Contact::set_phone_number(std::string phone_number) {
-	phone_number_ = phone_number;
-}
-
-void Contact::set_darkest_secret(std::string darkest_secret) {
-	darkest_secret_ = darkest_secret;
-}

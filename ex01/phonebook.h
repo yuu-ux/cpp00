@@ -22,7 +22,8 @@ class PhoneBook {
 		void Search();
 		Contact get_contact(int) const;
 		int get_size() const;
-		void InputPhoneBook(std::string, void (Contact::*setter)(std::string));
+		std::string InputInfo(std::string);
+		std::string InputPhoneNumber();
 	private:
 		Contact		contacts_[8];
 		int	size_;
