@@ -6,12 +6,11 @@
 /*   By: yehara <yehara@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 02:01:53 by yehara            #+#    #+#             */
-/*   Updated: 2025/07/07 02:02:53 by yehara           ###   ########.fr       */
+/*   Updated: 2025/07/08 15:39:51 by yehara           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "phonebook.h"
-#include <iostream>
 
 int main(void)
 {
