@@ -18,8 +18,9 @@ int main(void)
 	std::string line;
 	PhoneBook phone_book;
 
-	std::cout << "Input ADD or SEARCH or EXIT" << std::endl;
+	std::cout << "----------Welcome to Phonebook----------" << std::endl << std::endl;
 	while (true) {
+		std::cout << "ADD or SEARCH or EXIT: ";
 		getline(std::cin, line);
 		if (std::cin.eof()) {
 			std::cout << "EOF" << std::endl;
@@ -32,6 +33,6 @@ int main(void)
 		else if (line == "EXIT")
 			break ;
 		else
-			std::cout << "usage: ADD or SEARCH or EXIT" << std::endl;
+			std::cout << "※ コマンドを入力してください" << std::endl;
 	}
 }

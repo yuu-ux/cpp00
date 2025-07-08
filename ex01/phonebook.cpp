@@ -6,7 +6,7 @@
 /*   By: yehara <yehara@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 20:51:22 by yehara            #+#    #+#             */
-/*   Updated: 2025/07/07 02:02:00 by yehara           ###   ########.fr       */
+/*   Updated: 2025/07/08 14:21:56 by yehara           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,15 @@
 #include "phonebook.h"
 #include "contact.h"
 
+const int kMobilePhoneNum = 11;
+const int kLandlinePhoneNum = 10;
+const int kMaxContacts = 8;
+const int kMaxDisplayMessage = 10;
+const int kDisplayColumn = 10;
+
 PhoneBook::PhoneBook() : size_(0) {}
 
+// getter
 Contact PhoneBook::get_contact(int index) const {
 	return contacts_[index];
 }
@@ -27,14 +34,25 @@ int PhoneBook::get_size() const {
 	return size_;
 }
 
+// バリデーション・入力の受け取り
+bool is_only_space(std::string line) {
+	for (size_t i = 0; i < line.length(); i++) {
+		if (!std::isspace(line[i])) return false;
+	}
+	return true;
+}
+
 std::string PhoneBook::InputInfo(std::string prompt) {
 	std::string line;
 
 	while (true) {
 		std::cout << prompt;
 		std::getline(std::cin, line);
-		if (line.empty()) {
-			std::cerr << "もう一度入力してください" << std::endl;
+		if (std::cin.eof()) {
+			break ;
+		}
+		if (line.empty() || is_only_space(line)) {
+			std::cerr << "入力情報がありません" << std::endl;
 		} else {
 			break ;
 		}
@@ -56,10 +74,14 @@ std::string PhoneBook::InputPhoneNumber() {
 	while (true) {
 		std::cout << "phone_number: ";
 		std::getline(std::cin, line);
-		if (line.empty()) {
-			std::cerr << "Empty Input" << std::endl;
-		} else if (line.length() != 10 || !is_numeric(line)) {
-			std::cerr << "Invalid phone number format" << std::endl;
+		if (std::cin.eof()) {
+			break ;
+		}
+		size_t line_length = line.length();
+		if (line.empty() || is_only_space(line)) {
+			std::cerr << "入力情報がありません" << std::endl;
+		} else if ((line_length != kMobilePhoneNum && line_length != kLandlinePhoneNum) || !is_numeric(line)) {
+			std::cerr << "電話番号のフォーマットが適切じゃありません" << std::endl;
 		} else {
 			break ;
 		}
@@ -74,25 +96,25 @@ void PhoneBook::Add() {
 	// 電話番号は追加のバリデーションがあるため、別関数に切り出し
 	std::string phone_number = InputPhoneNumber();
 	std::string darkest_secret = InputInfo("darkest_secret: ");
-	contacts_[size_ % 8] = Contact(first_name, last_name, nick_name, phone_number, darkest_secret);
+	contacts_[size_ % kMaxContacts] = Contact(first_name, last_name, nick_name, phone_number, darkest_secret);
 	size_++;
 }
 
 std::string FormatChar(std::string str) {
-	if (str.length() <= 10) {
+	if (str.length() <= kMaxDisplayMessage) {
 		return str;
 	}
 
-	std::string new_str = str.substr(0, 10);
-	new_str.at(9) = '.';
+	std::string new_str = str.substr(0, kMaxDisplayMessage);
+	new_str.at(kMaxDisplayMessage - 1) = '.';
 	return new_str;
 }
 
 void PrintHead() {
-	std::cout << std::setw(10) << "index" << "|";
-	std::cout << std::setw(10) << "first_name" << "|";
-	std::cout << std::setw(10) << "last_name" << "|";
-	std::cout << std::setw(10) << "nick_name" << "|";
+	std::cout << std::setw(kDisplayColumn) << "index" << "|";
+	std::cout << std::setw(kDisplayColumn) << "first_name" << "|";
+	std::cout << std::setw(kDisplayColumn) << "last_name" << "|";
+	std::cout << std::setw(kDisplayColumn) << "nick_name" << "|";
 	std::cout << std::endl;
 }
 
@@ -104,7 +126,7 @@ bool PhoneBook::is_validate(std::string index) {
 		return false;
 	}
 	int _index = std::atoi(index.c_str());
-	if (0 > _index || (size_ - 1) < _index) {
+	if (0 > _index || std::min(size_ - 1, kMaxContacts) < _index) {
 		return false;
 	}
 	return true;
@@ -116,11 +138,11 @@ void PhoneBook::Search() {
 		return ;
 	}
 	PrintHead();
-	for (int i = 0; i < 8; i++) {
-		std::cout << std::setw(10) << i << "|";
-		std::cout << std::setw(10) << FormatChar(get_contact(i).get_first_name()) << "|";
-		std::cout << std::setw(10) << FormatChar(get_contact(i).get_last_name()) << "|";
-		std::cout << std::setw(10) << FormatChar(get_contact(i).get_nick_name()) << "|";
+	for (int i = 0; i < std::min(size_, kMaxContacts); i++) {
+		std::cout << std::setw(kDisplayColumn) << i << "|";
+		std::cout << std::setw(kDisplayColumn) << FormatChar(get_contact(i).get_first_name()) << "|";
+		std::cout << std::setw(kDisplayColumn) << FormatChar(get_contact(i).get_last_name()) << "|";
+		std::cout << std::setw(kDisplayColumn) << FormatChar(get_contact(i).get_nick_name()) << "|";
 		std::cout << std::endl;
 	}
 	std::cout << "詳細を確認したいインデックスを選択してください" << std::endl;
@@ -128,11 +150,11 @@ void PhoneBook::Search() {
 	std::getline(std::cin, index);
 	if (is_validate(index)) {
 		int _index = std::atoi(index.c_str());
-		std::cout << "first_name: " << get_contact(_index).get_first_name() << std::endl;
-		std::cout << "last_name: " << get_contact(_index).get_last_name() << std::endl;
-		std::cout << "nick_name: " << get_contact(_index).get_nick_name() << std::endl;
-		std::cout << "phone_number: " << get_contact(_index).get_phone_number() << std::endl;
-		std::cout << "darkest_secret: " << get_contact(_index).get_darkest_secret() << std::endl;
+		std::cout << "first_name: " << get_contact(_index).get_first_name() << std::endl
+		<< "last_name: " << get_contact(_index).get_last_name() << std::endl
+		<< "nick_name: " << get_contact(_index).get_nick_name() << std::endl
+		<< "phone_number: " << get_contact(_index).get_phone_number() << std::endl
+		<< "darkest_secret: " << get_contact(_index).get_darkest_secret() << std::endl;
 	} else {
 		std::cerr << "不正な入力です" << std::endl;
 	}
