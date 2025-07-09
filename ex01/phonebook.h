@@ -35,4 +35,5 @@ class PhoneBook {
 		Contact		contacts_[8];
 		int	size_;
 };
+
 #endif
