@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 
 int main(int argc, char **argv) {
 	if (argc == 1) {
@@ -8,7 +7,9 @@ int main(int argc, char **argv) {
 	}
 	for (int i = 1; i < argc; i++) {
 		std::string input = argv[i];
-		transform(input.begin(), input.end(), input.begin(), ::toupper);
+		for (size_t j = 0; j < input.length(); j++) {
+			input[j] = std::toupper(input[j]);
+		}
 		std::cout << input;
 	}
 	std::cout << std::endl;
